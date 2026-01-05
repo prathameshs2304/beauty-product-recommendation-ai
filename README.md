@@ -206,3 +206,8 @@ GitHub: https://github.com/prathameshs2304
 📜 License
 
 This project is licensed for educational & demonstration purposes.# beauty-product-recommendation-ai
+<img width="2047" height="1150" alt="image" src="https://github.com/user-attachments/assets/cd50dd20-d975-414c-b4a8-2fbd8536301b" />
+<img width="2047" height="1092" alt="image" src="https://github.com/user-attachments/assets/07b64b45-36d0-4334-b08c-affe4cfc3611" />
+<img width="1918" height="981" alt="image" src="https://github.com/user-attachments/assets/132890be-3ab1-454a-b0da-290c16d7b6d3" />
+
+
