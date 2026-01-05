@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Face Shape & Dimensions</title>
+
+<style>
+body {
+  margin: 0;
+  background: #000;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.camera-container img {
+  width: calc(100vw - 340px);
+  height: 100vh;
+  object-fit: cover;
+}
+
+.overlay-header {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  background: rgba(0,0,0,0.65);
+  color: white;
+  padding: 14px 18px;
+  border-radius: 12px;
+  z-index: 10;
+}
+
+.result-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 340px;
+  height: 100%;
+  background: #fff;
+  padding: 20px;
+  overflow-y: auto;
+  box-shadow: -8px 0 24px rgba(0,0,0,0.3);
+}
+
+.result-item {
+  margin-bottom: 14px;
+}
+
+.result-item strong {
+  font-size: 12px;
+  color: #666;
+  display: block;
+}
+
+.result-item span {
+  font-size: 18px;
+  font-weight: bold;
+  color: #111;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 16px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="camera-container">
+  <img src="/face-shape-live">
+</div>
+
+<div class="overlay-header">
+  <h3>Face Shape & Dimensions</h3>
+  <p id="status">Hold still…</p>
+</div>
+
+<div class="result-panel">
+
+  <div class="result-item"><strong>Face Shape</strong><span id="faceShape">—</span></div>
+  <div class="result-item"><strong>Face Width</strong><span id="faceWidth">—</span></div>
+  <div class="result-item"><strong>Face Height</strong><span id="faceHeight">—</span></div>
+  <div class="result-item"><strong>Face Ratio</strong><span id="faceRatio">—</span></div>
+  <div class="result-item"><strong>Facial Balance</strong><span id="facialBalance">—</span></div>
+  
+
+  <hr>
+
+  <div class="result-item"><strong>Shape Confidence</strong><span id="shapeConfidence">—</span></div>
+  <div class="result-item"><strong>Overall Confidence</strong><span id="confidence">—</span></div>
+
+  <div class="result-item">
+    <strong>Explanation</strong>
+    <span id="explanation" style="font-size:14px;font-weight:normal;color:#444">—</span>
+  </div>
+
+</div>
+
+<!-- IMPORTANT: direct path -->
+<script src="/face_shape_live.js"></script>
+
+</body>
+</html>

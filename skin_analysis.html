@@ -1,41 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skin Analysis</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skin Analysis</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-    <h1 class="headline">Skin Quality Analysis</h1>
-    
-    <div class="container">
-        <form id="skinAnalysisForm">
-            <input type="file" accept="image/*" required id="imageUpload" style="display: none;">
-            <label for="imageUpload" id="fileLabel" class="file-label">Choose File</label>
-            <img id="uploadedImage" src="" alt="Uploaded Image" style="display: none; max-width: 200px; margin-top: 10px;">
-            <button type="submit" class="login-button">Analyze Skin</button>
-        </form>
-        
-        <div id="results" style="display: none; margin-top: 20px; border: 1px solid #1a1919; padding: 10px;">
-            <h2>Analysis Results</h2>
-            <p id="skinMetrics"></p>
-            <h3>Recommended Products</h3>
-            <ul id="productRecommendations"></ul>
-            <div id="instructions" style="margin-top: 10px;">
-                <h4>Instructions:</h4>
-                <p>Based on your skin analysis, here are some recommendations:</p>
-                <ul>
-                    <li>Use a gentle cleanser to maintain skin health.</li>
-                    <li>Apply moisturizer daily to keep your skin hydrated.</li>
-                    <li>Consider using sunscreen to protect against UV rays.</li>
-                    <li>Consult a dermatologist for personalized advice.</li>
-                </ul>
-            </div>
-        </div>
+
+<body class="skin-page">
+
+<div class="skin-wrapper">
+  <div class="skin-card">
+
+    <h1 class="skin-title">Skin Analysis</h1>
+    <p class="skin-subtitle">
+      Upload a clear photo of your face and click <strong>Analyze</strong>.
+    </p>
+
+    <div class="skin-controls">
+      <input type="file" id="imageInput" accept="image/*">
+      <button id="analyzeBtn" class="primary-btn">Analyze</button>
     </div>
 
-    <script src="skin_analysis.js"></script>
+    <div class="skin-content">
+      <div class="skin-preview">
+        <p class="section-heading">Preview</p>
+        <img id="preview" style="display:none; max-width:100%; border-radius:12px;">
+      </div>
+
+      <div class="skin-result">
+        <p class="section-heading">Analysis Result</p>
+        <pre id="result"></pre>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- AI Assistant -->
+<div class="chat-section">
+  <h2>AI Beauty Assistant</h2>
+  <input type="text" id="userMessage" placeholder="Ask skincare or makeup...">
+  <button id="sendMessage">Ask AI</button>
+
+  <div id="chatboxFrame" style="display:none;">
+    <iframe id="botIframe" style="width:100%; height:420px; border:none;"></iframe>
+  </div>
+</div>
+
+<script>
+(() => {
+  const imageInput = document.getElementById("imageInput");
+  const analyzeBtn = document.getElementById("analyzeBtn");
+  const preview = document.getElementById("preview");
+  const result = document.getElementById("result");
+
+  imageInput.addEventListener("change", () => {
+    const file = imageInput.files[0];
+    if (!file) return;
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+  });
+
+  analyzeBtn.addEventListener("click", async () => {
+    const file = imageInput.files[0];
+    if (!file) {
+      alert("Select an image first");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    result.textContent = "Analyzing...";
+
+    try {
+      const res = await fetch("/analyze-skin", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        result.textContent = "Error: " + (data.error || "Unknown error");
+        return;
+      }
+
+      result.textContent = JSON.stringify(data.skinMetrics, null, 2);
+
+    } catch (err) {
+      result.textContent = "Client error: " + err.message;
+    }
+  });
+
+  document.getElementById("sendMessage").addEventListener("click", () => {
+    const iframe = document.getElementById("botIframe");
+    iframe.src =
+      "https://cdn.botpress.cloud/webchat/v2.4/shareable.html?configUrl=https://files.bpcontent.cloud/2025/06/03/14/20250603141923-4U6QBKVW.json";
+    document.getElementById("chatboxFrame").style.display = "block";
+  });
+})();
+</script>
 
 </body>
 </html>

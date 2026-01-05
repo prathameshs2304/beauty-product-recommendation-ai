@@ -1,0 +1,4 @@
+app = "beauty-product-recommendation"  # Replace with your desired app name
+
+[build]
+  # Build configuration options

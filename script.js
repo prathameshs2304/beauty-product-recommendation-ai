@@ -14,7 +14,7 @@ document.getElementById('loginForm').addEventListener('submit', function(event) 
     // Simple validation (you can replace this with actual authentication logic)
     if (username && password) {
         // Redirect to the skin analysis page
-        window.location.href = 'skin_analysis.html'; // Redirect to the skin analysis page
+        window.location.href = 'feature_selection.html'; // Redirect to the skin analysis page
     } else {
         alert('Please enter both username and password.');
     }
@@ -30,3 +30,10 @@ document.getElementById('showLogin').addEventListener('click', function() {
     document.getElementById('signupContainer').style.display = 'none';
     document.querySelector('.form-container').style.display = 'block';
 });
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    // Normally here you'd validate the login
+    window.location.href = 'feature_selection.html'; // Redirect on successful login
+  });
+  
