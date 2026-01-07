@@ -1,25 +1,22 @@
-.
-
 💄 Beauty Product Recommendation AI
 Face Shape & Skin Intelligence System
 
-An AI-powered web application that analyzes face shape, facial dimensions, and skin conditions using computer vision and machine learning, and provides intelligent beauty & skincare insights.
+An advanced AI-powered web application that analyzes face shape, facial dimensions, skin health (photo + live camera) and provides intelligent beauty insights using computer vision and machine learning.
+
+Designed as a hackathon-grade, industry-style prototype inspired by platforms like PerfectCorp and ModiFace.
 
 🚀 Project Overview
 
-Beauty Product Recommendation AI is a full-stack AI system that combines:
+Beauty Product Recommendation AI is a full-stack AI system combining:
 
-Real-time face shape detection
+✅ Real-time face shape detection
+✅ Facial landmark geometry analysis
+✅ Photo-based skin analysis with radar visualization
+✅ Live camera skin analysis with real-time metrics
+✅ AI-powered beauty assistant (chatbot)
+✅ Modern professional UI
 
-Facial landmark geometry analysis
-
-Photo-based skin analysis
-
-AI-powered beauty assistant (chatbot)
-
-User-friendly modern UI
-
-The system is designed to simulate industry-grade face & skin analysis platforms (similar to PerfectCorp-style workflows) while remaining hackathon-safe and explainable.
+The system demonstrates end-to-end AI pipeline design from camera capture → landmark processing → ML inference → visualization → user interaction.
 
 🎯 Key Features
 1️⃣ Face Shape & Dimensions (Live Camera)
@@ -28,9 +25,9 @@ Real-time face detection using MediaPipe Face Landmarker
 
 Extracts 468+ facial landmarks
 
-Calculates:
+Computes:
 
-Face Shape (Square, Round, Oval, etc.)
+Face Shape (Square, Oval, Round, etc.)
 
 Face Width & Height (px)
 
@@ -38,62 +35,122 @@ Face Ratio
 
 Facial Balance (Balanced / Elongated)
 
-Confidence scores
+Confidence score
 
-Stable, non-flickering results after landmark stabilization
+Landmark stabilization prevents flickering
 
-2️⃣ Upload Photo Skin Analysis
+Live mesh visualization with professional UI
 
-Upload a face image for skin analysis
+2️⃣ Upload Photo Skin Analysis (Completed)
 
-Detects:
+Upload any face image
+
+AI analyzes multiple skin metrics:
 
 Acne severity
 
+Blackheads
+
 Dark circles
 
-Blackheads
+Hair quality
 
 Hydration level
 
-Hair quality indicators
+Pore size
 
-Outputs structured JSON results for explainability
+Sensitivity
 
-3️⃣ Live Face Skin Analysis (UI Ready)
+Skin tone
 
-UI scaffold prepared for future real-time skin analysis
+Wrinkles
 
-Camera-based architecture already integrated
+Outputs structured explainable metrics
 
-Clearly marked as Coming Soon
+Radar (Spider) Graph Visualization
+
+Blue / black professional styling
+
+Clear comparative visualization of skin parameters
+
+Clean three-column layout:
+
+Preview image
+
+Analysis results
+
+Radar visualization
+
+Integrated AI Beauty Assistant chatbot
+
+3️⃣ Live Face Skin Analysis (Real-Time Camera) ✅ (New)
+
+Real-time camera feed with facial landmark overlay
+
+Pose validation before capture:
+
+Face centered
+
+Straight gaze
+
+No tilt / rotation
+
+Good lighting
+
+One-click capture workflow
+
+Live skin metrics analysis after capture
+
+Real-time Radar Graph visualization
+
+Compact side-panel UI for:
+
+Preview image
+
+Skin metrics
+
+Radar chart
+
+Designed for demo stability and judge testing
 
 4️⃣ AI Beauty Assistant
 
-Integrated chatbot (Botpress)
+Integrated chatbot using Botpress
 
-Answers skincare & makeup queries
+Handles:
 
-Personalized beauty recommendations
+Skincare guidance
+
+Makeup suggestions
+
+Product advice
+
+Works alongside analysis results for personalized assistance
 
 5️⃣ Modern UI / UX
 
-Clean card-based interface
+Glassmorphism card design
 
 Responsive layout
 
 Feature selection dashboard
 
-Side result panels for live analysis
+Clean alignment and spacing
+
+Real-time chart visualization
+
+Optimized for live demos and presentations
 
 🧠 Tech Stack
 Frontend
 
 HTML5
 
-CSS3 (modern glassmorphism UI)
+CSS3 (Glassmorphism UI)
 
-JavaScript (Fetch API)
+JavaScript
+
+Chart.js (Radar visualization)
 
 Backend
 
@@ -113,7 +170,7 @@ Rule-based face shape classification
 
 CNN-based skin analysis (photo upload)
 
-Confidence scoring & stabilization logic
+Stability confidence logic
 
 📂 Project Structure
 beauty-product-recommendation-ai/
@@ -121,7 +178,7 @@ beauty-product-recommendation-ai/
 ├── app.py
 ├── face_shape_live.py
 ├── face_shape_analyzer.py
-├── face_landmarker.task
+├── your_cnn_model.py
 │
 ├── templates/
 │   ├── feature_selection.html
@@ -131,6 +188,7 @@ beauty-product-recommendation-ai/
 │
 ├── static/
 │   ├── face_shape_live.js
+│   ├── live_skin_analysis.js
 │   ├── style.css
 │   ├── img1.jpeg
 │   ├── img2.jpeg
@@ -153,7 +211,7 @@ python -m venv .venv
 3️⃣ Install Dependencies
 pip install -r requirements.txt
 
-4️⃣ Run Flask App
+4️⃣ Run Application
 python app.py
 
 5️⃣ Open in Browser
@@ -161,39 +219,43 @@ http://127.0.0.1:5000/feature_selection.html
 
 📸 Screenshots
 
-(Add screenshots here in GitHub using drag & drop)
+(Add screenshots here using GitHub drag & drop)
 
-Suggested sections:
+Suggested:
 
-Feature Selection Page
+Feature Selection Dashboard
 
 Face Shape Live Analysis
 
-Upload Skin Analysis
+Upload Skin Analysis + Radar Graph
+
+Live Skin Analysis Camera View
 
 AI Beauty Assistant Chat
 
 🧪 Accuracy & Limitations
 
-Face shape analysis is based on geometric heuristics, not medical diagnosis
+Not a medical or dermatology diagnostic tool
 
-Skin analysis is indicative, not dermatological advice
+Performance depends on lighting and camera quality
 
-Lighting & camera quality affect accuracy
+Skin analysis is indicative and experimental
 
-Designed for educational & prototype use
+Designed for research, education, and prototype demonstrations
 
 🔮 Future Enhancements
 
-True 3D face mesh rendering (AR-style surface mesh)
+True 3D face mesh rendering
 
 Personalized product recommendation engine
 
-User profiles & history
+User profile history tracking
 
-Cloud deployment
+Cloud deployment (AWS / GCP)
 
-Mobile-friendly camera optimization
+Mobile camera optimization
+
+Real-time skin tracking (no capture required)
 
 🧑‍💻 Author
 
@@ -205,6 +267,7 @@ GitHub: https://github.com/prathameshs2304
 
 📜 License
 
+This project is licensed for educational and demonstration purposes.
 This project is licensed for educational & demonstration purposes.# beauty-product-recommendation-ai
 <img width="2047" height="1150" alt="image" src="https://github.com/user-attachments/assets/cd50dd20-d975-414c-b4a8-2fbd8536301b" />
 <img width="2047" height="1092" alt="image" src="https://github.com/user-attachments/assets/07b64b45-36d0-4334-b08c-affe4cfc3611" />
