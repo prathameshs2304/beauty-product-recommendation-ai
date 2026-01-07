@@ -1,39 +1,57 @@
-// Handle login form submission
-document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Prevent form submission
+/* ===============================
+   Global App Script
+   =============================== */
 
-    // Get user input
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
+document.addEventListener("DOMContentLoaded", () => {
 
-    // Here you can add your logic to handle sign-in
-    // For now, we'll just log the input and redirect to the skin analysis page
-    console.log('Username:', username);
-    console.log('Password:', password);
+  /* ================= LOGIN FORM ================= */
 
-    // Simple validation (you can replace this with actual authentication logic)
-    if (username && password) {
-        // Redirect to the skin analysis page
-        window.location.href = 'feature_selection.html'; // Redirect to the skin analysis page
-    } else {
-        alert('Please enter both username and password.');
-    }
+  const loginForm = document.getElementById("loginForm");
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+
+  if (loginForm && usernameInput && passwordInput) {
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const username = usernameInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      console.log("Username:", username);
+      console.log("Password:", password);
+
+      if (!username || !password) {
+        alert("Please enter both username and password.");
+        return;
+      }
+
+      // ✅ Simulated authentication (replace later with real auth)
+      window.location.href = "feature_selection.html";
+    });
+
+  }
+
+
+  /* ================= SIGNUP / LOGIN TOGGLE ================= */
+
+  const showSignupBtn = document.getElementById("showSignup");
+  const showLoginBtn = document.getElementById("showLogin");
+  const loginContainer = document.querySelector(".form-container");
+  const signupContainer = document.getElementById("signupContainer");
+
+  if (showSignupBtn && showLoginBtn && loginContainer && signupContainer) {
+
+    showSignupBtn.addEventListener("click", () => {
+      loginContainer.style.display = "none";
+      signupContainer.style.display = "block";
+    });
+
+    showLoginBtn.addEventListener("click", () => {
+      signupContainer.style.display = "none";
+      loginContainer.style.display = "block";
+    });
+
+  }
+
 });
-
-// Handle signup form toggle
-document.getElementById('showSignup').addEventListener('click', function() {
-    document.querySelector('.form-container').style.display = 'none';
-    document.getElementById('signupContainer').style.display = 'block';
-});
-
-document.getElementById('showLogin').addEventListener('click', function() {
-    document.getElementById('signupContainer').style.display = 'none';
-    document.querySelector('.form-container').style.display = 'block';
-});
-
-document.getElementById('loginForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    // Normally here you'd validate the login
-    window.location.href = 'feature_selection.html'; // Redirect on successful login
-  });
-  

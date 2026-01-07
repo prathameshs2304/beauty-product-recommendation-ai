@@ -4,64 +4,166 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Skin Analysis</title>
+
   <link rel="stylesheet" href="style.css" />
+
+  <!-- ✅ Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body class="skin-page">
 
 <div class="skin-wrapper">
+
   <div class="skin-card">
 
-    <h1 class="skin-title">Skin Analysis</h1>
+    <h1 class="skin-title">Skin Analysis & AI Beauty Assistant</h1>
     <p class="skin-subtitle">
-      Upload a clear photo of your face and click <strong>Analyze</strong>.
+      Upload a clear photo and analyze your skin. Ask AI for skincare or makeup advice.
     </p>
 
+    <!-- Controls -->
     <div class="skin-controls">
-      <input type="file" id="imageInput" accept="image/*">
+      <input type="file" id="imageInput" accept="image/*" hidden>
+      <button id="uploadBtn" class="secondary-btn">Upload Image</button>
       <button id="analyzeBtn" class="primary-btn">Analyze</button>
     </div>
 
-    <div class="skin-content">
-      <div class="skin-preview">
+    <!-- ================= ANALYSIS ROW ================= -->
+    <div class="analysis-row">
+
+      <!-- Preview -->
+      <div class="analysis-panel">
         <p class="section-heading">Preview</p>
-        <img id="preview" style="display:none; max-width:100%; border-radius:12px;">
+        <img id="preview">
       </div>
 
-      <div class="skin-result">
+      <!-- Result -->
+      <div class="analysis-panel">
         <p class="section-heading">Analysis Result</p>
-        <pre id="result"></pre>
+        <div id="result" class="result-box">No analysis yet</div>
       </div>
+
+      <!-- Radar -->
+      <div class="analysis-panel radar-panel">
+        <p class="section-heading">Skin Radar Analysis</p>
+        <canvas id="radarChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- ================= CHATBOT ROW ================= -->
+    <div class="chat-row">
+
+      <h2 class="chat-title">AI Beauty Assistant</h2>
+
+      <div class="chat-controls">
+        <input type="text" id="userMessage" class="chat-input" placeholder="Ask skincare or makeup...">
+        <button id="sendMessage" class="chat-button">Ask AI</button>
+      </div>
+
+      <div id="chatboxFrame" class="chat-frame" style="display:none;">
+        <iframe id="botIframe"></iframe>
+      </div>
+
     </div>
 
   </div>
+
 </div>
 
-<!-- AI Assistant -->
-<div class="chat-section">
-  <h2>AI Beauty Assistant</h2>
-  <input type="text" id="userMessage" placeholder="Ask skincare or makeup...">
-  <button id="sendMessage">Ask AI</button>
-
-  <div id="chatboxFrame" style="display:none;">
-    <iframe id="botIframe" style="width:100%; height:420px; border:none;"></iframe>
-  </div>
-</div>
-
+<!-- ================= Page Script ================= -->
 <script>
 (() => {
-  const imageInput = document.getElementById("imageInput");
-  const analyzeBtn = document.getElementById("analyzeBtn");
-  const preview = document.getElementById("preview");
-  const result = document.getElementById("result");
+  const imageInput  = document.getElementById("imageInput");
+  const uploadBtn   = document.getElementById("uploadBtn");
+  const analyzeBtn  = document.getElementById("analyzeBtn");
+  const preview     = document.getElementById("preview");
+  const result      = document.getElementById("result");
+  const radarCanvas = document.getElementById("radarChart");
 
+  let radarChart = null;
+
+  /* ================= Upload Button ================= */
+  uploadBtn.addEventListener("click", () => {
+    imageInput.click();
+  });
+
+  /* ================= Preview ================= */
   imageInput.addEventListener("change", () => {
     const file = imageInput.files[0];
     if (!file) return;
+
     preview.src = URL.createObjectURL(file);
     preview.style.display = "block";
   });
 
+  /* ================= Formatter ================= */
+  function formatResult(metrics) {
+    let html = "";
+
+    for (const key in metrics) {
+      const value = metrics[key];
+      if (Array.isArray(value)) {
+        const label = key.replaceAll("_", " ").toUpperCase();
+        const score = Number(value[1]).toFixed(1);
+
+        html += `
+          <div>
+            <strong>${label}</strong> : ${value[0]} (${score})
+          </div>
+        `;
+      }
+    }
+    return html || "<div>No metrics detected</div>";
+  }
+
+  /* ================= Radar Graph ================= */
+  function renderRadarChart(metrics) {
+    const labels = [];
+    const values = [];
+
+    for (const key in metrics) {
+      const value = metrics[key];
+      if (Array.isArray(value)) {
+        labels.push(key.replaceAll("_", " "));
+        values.push(Number(value[1]));
+      }
+    }
+
+    if (radarChart) radarChart.destroy();
+
+    radarChart = new Chart(radarCanvas, {
+      type: "radar",
+      data: {
+        labels,
+        datasets: [{
+          label: "Skin Score",
+          data: values,
+          fill: true,
+          backgroundColor: "rgba(0, 84, 255, 0.25)",
+          borderColor: "#003cff",
+          pointBackgroundColor: "#003cff",
+          pointBorderColor: "#ffffff",
+          pointBorderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          r: {
+            suggestedMin: 0,
+            suggestedMax: 100,
+            ticks: { stepSize: 20 }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  /* ================= Analyze ================= */
   analyzeBtn.addEventListener("click", async () => {
     const file = imageInput.files[0];
     if (!file) {
@@ -71,8 +173,7 @@
 
     const formData = new FormData();
     formData.append("image", file);
-
-    result.textContent = "Analyzing...";
+    result.innerHTML = "Analyzing...";
 
     try {
       const res = await fetch("/analyze-skin", {
@@ -81,25 +182,30 @@
       });
 
       const data = await res.json();
-
-      if (!res.ok) {
-        result.textContent = "Error: " + (data.error || "Unknown error");
+      if (!res.ok || !data.skinMetrics) {
+        result.innerHTML = "❌ Analysis failed";
         return;
       }
 
-      result.textContent = JSON.stringify(data.skinMetrics, null, 2);
+      result.innerHTML = formatResult(data.skinMetrics);
+      renderRadarChart(data.skinMetrics);
 
     } catch (err) {
-      result.textContent = "Client error: " + err.message;
+      result.innerHTML = "⚠️ Client error: " + err.message;
     }
   });
 
+  /* ================= Chatbot ================= */
   document.getElementById("sendMessage").addEventListener("click", () => {
+    const frame = document.getElementById("chatboxFrame");
     const iframe = document.getElementById("botIframe");
+
     iframe.src =
       "https://cdn.botpress.cloud/webchat/v2.4/shareable.html?configUrl=https://files.bpcontent.cloud/2025/06/03/14/20250603141923-4U6QBKVW.json";
-    document.getElementById("chatboxFrame").style.display = "block";
+
+    frame.style.display = "block";
   });
+
 })();
 </script>
 

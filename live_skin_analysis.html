@@ -1,15 +1,193 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Live Skin Analysis</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<title>Live Face Skin Analysis</title>
+
+<link rel="stylesheet" href="style.css">
+
+<!-- ✅ Chart.js for Spider Graph -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+  margin: 0;
+  background: #000;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.camera-container img {
+  width: calc(100vw - 360px);
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* ===== Overlay ===== */
+
+.overlay {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  color: white;
+  z-index: 10;
+}
+
+.capture-btn {
+  margin-top: 12px;
+  padding: 10px 18px;
+  font-size: 14px;
+  background: #00c853;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  display: none;
+}
+
+.capture-btn:disabled {
+  opacity: 0.6;
+}
+
+/* ===== Instructions Overlay ===== */
+
+.instructions-overlay {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  color: rgba(255,255,255,0.85);
+  font-size: 13px;
+  line-height: 1.5;
+  pointer-events: none;
+}
+
+/* ===== Right Panel ===== */
+
+.side-panel {
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 360px;
+  height: 100%;
+  background: #fff;
+  padding: 18px;
+  box-shadow: -8px 0 24px rgba(0,0,0,0.3);
+  overflow-y: auto;
+}
+
+.side-panel h3 {
+  margin-top: 0;
+  color: #222;
+}
+
+.preview-img {
+  width: 100%;
+  max-height: 240px;
+  object-fit: contain;
+  border-radius: 10px;
+  display: none;
+  border: 1px solid #eee;
+  margin-bottom: 12px;
+}
+
+.result-box {
+  background: #f7f7f7;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+/* ===== FORCE TIGHT STACKING FOR RESULT + GRAPH ===== */
+
+/* Kill default spacing */
+pre,
+p {
+  margin: 0;
+}
+
+/* Result box spacing */
+.result-box {
+  margin-bottom: 4px !important;
+}
+
+/* Metrics title */
+.metrics-title {
+  margin-top: 4px !important;
+  margin-bottom: 4px !important;
+  font-weight: 700;
+  color: #111;
+}
+
+/* Pull chart upward */
+#radarChart {
+  margin-top: 15px !important;
+  display: block;
+}
+
+/* Prevent canvas from creating large empty space */
+.side-panel canvas {
+  max-height: 260px;
+}
+
+
+.side-panel p,
+.side-panel h3 {
+  color: #111;
+  font-weight: 600;
+}
+
+/* Result text inside box */
+.result-box {
+  color: #111;
+}
+
+</style>
 </head>
-<body class="skin-page">
-  <div class="skin-wrapper">
-    <div class="skin-card">
-      <h2>Live Face Skin Analysis</h2>
-      <p>Coming soon — real-time skin analysis using Live Camera and Machine Learning.</p>
-    </div>
-  </div>
+
+<body>
+
+<div class="camera-container">
+  <img id="cameraFeed" src="/face-shape-live">
+</div>
+
+<!-- Overlay -->
+<div class="overlay">
+  <h3>Live Face Skin Analysis</h3>
+  <p id="poseStatus">Align your face straight</p>
+  <button id="captureBtn" class="capture-btn">Capture</button>
+</div>
+
+<!-- Instructions -->
+<div class="instructions-overlay">
+  • Face centered<br>
+  • Look straight<br>
+  • No tilt / rotation<br>
+  • Good lighting
+</div>
+
+<!-- Right Panel -->
+<div class="side-panel">
+  <h3>Skin Analysis</h3>
+
+  <img id="previewImage" class="preview-img">
+
+  <button id="analyzeBtn" class="primary-btn" disabled>
+    Analyze
+  </button>
+
+  <p style="margin-top:10px;font-weight:bold;">Result</p>
+  <pre id="resultBox" class="result-box">No capture yet</pre>
+
+  <!-- ✅ Spider Graph Section -->
+  <p class="metrics-title">Skin Metrics Overview</p>
+  <canvas id="radarChart" height="260"></canvas>
+</div>
+
+<canvas id="captureCanvas" style="display:none;"></canvas>
+
+<script src="live_skin_analysis.js"></script>
+
 </body>
 </html>
