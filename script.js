@@ -1,6 +1,6 @@
 /* ===============================
-   Global App Script
-   =============================== */
+   Global App Script (Safe Version)
+=============================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -42,16 +42,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (showSignupBtn && showLoginBtn && loginContainer && signupContainer) {
 
-    showSignupBtn.addEventListener("click", () => {
+    showSignupBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       loginContainer.style.display = "none";
       signupContainer.style.display = "block";
     });
 
-    showLoginBtn.addEventListener("click", () => {
+    showLoginBtn.addEventListener("click", (e) => {
+      e.preventDefault();
       signupContainer.style.display = "none";
       loginContainer.style.display = "block";
     });
 
   }
+
+
+  /* ================= SKIN IMAGE UPLOAD UX ================= */
+  /* Safe: Runs only if elements exist on page */
+
+  const imageInput = document.getElementById("imageInput");
+  const uploadBtn  = document.getElementById("uploadBtn");
+  const preview    = document.getElementById("preview");
+
+  if (imageInput && uploadBtn && preview) {
+
+    imageInput.addEventListener("change", () => {
+      const file = imageInput.files[0];
+      if (!file) return;
+
+      // ✅ Preview image
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
+
+      // ✅ Visual feedback for user
+      uploadBtn.innerText = "Image Selected ✅";
+      uploadBtn.style.opacity = "0.9";
+
+      console.log("📷 Image selected:", file.name);
+    });
+
+  }
+
+
+  /* ================= SAFETY LOG ================= */
+
+  console.log("✅ Global script loaded safely");
 
 });

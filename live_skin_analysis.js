@@ -2,70 +2,64 @@
    DOM References
 ========================= */
 
+const video = document.getElementById("video");
+const canvas = document.getElementById("captureCanvas");
+
 const statusText = document.getElementById("poseStatus");
 const captureBtn = document.getElementById("captureBtn");
 const analyzeBtn = document.getElementById("analyzeBtn");
-const img = document.getElementById("cameraFeed");
-const canvas = document.getElementById("captureCanvas");
+
 const previewImage = document.getElementById("previewImage");
 const resultBox = document.getElementById("resultBox");
 const radarCanvas = document.getElementById("radarChart");
 
-let stableFrames = 0;
-let poseReady = false;
 let capturedBlob = null;
 let radarChart = null;
 
 /* =========================
-   Pose Monitoring
+   Start Camera
 ========================= */
 
-setInterval(() => {
-  fetch("/face-shape-result")
-    .then(res => res.json())
-    .then(data => {
-      if (!data || data.status === "processing") {
-        stableFrames = 0;
-        statusText.innerText = "Detecting face…";
-        captureBtn.style.display = "none";
-        return;
-      }
-
-      if (data.faceWidth && data.faceHeight && data.confidence >= 95) {
-        stableFrames++;
-      } else {
-        stableFrames = 0;
-      }
-
-      if (stableFrames > 6) {
-        poseReady = true;
-        statusText.innerText = "Perfect pose detected";
-        captureBtn.style.display = "inline-block";
-      } else {
-        poseReady = false;
-        statusText.innerText = "Hold still…";
-        captureBtn.style.display = "none";
-      }
-    })
-    .catch(() => {
-      statusText.innerText = "Camera sync lost";
+async function startCamera() {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: false
     });
-}, 500);
+    video.srcObject = stream;
+  } catch (err) {
+    alert("Camera permission denied or unavailable.");
+    console.error("Camera error:", err);
+  }
+}
+
+startCamera();
 
 /* =========================
-   Capture Only
+   Auto Enable Capture (simple UX)
+========================= */
+
+setTimeout(() => {
+  captureBtn.style.display = "inline-block";
+  statusText.innerText = "Ready to capture";
+}, 1500);
+
+/* =========================
+   Capture Frame
 ========================= */
 
 captureBtn.addEventListener("click", () => {
-  if (!poseReady) return;
+  if (!video.videoWidth) return;
 
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight;
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
 
   const ctx = canvas.getContext("2d");
-  ctx.drawImage(img, 0, 0);
+  ctx.drawImage(video, 0, 0);
 
   canvas.toBlob(blob => {
+    if (!blob) return;
+
     capturedBlob = blob;
 
     // Preview image
@@ -102,7 +96,6 @@ function formatResult(metrics) {
 ========================= */
 
 function renderRadarChart(metrics) {
-
   const labels = [];
   const values = [];
 
@@ -114,7 +107,6 @@ function renderRadarChart(metrics) {
     }
   }
 
-  // Destroy previous chart if exists
   if (radarChart) {
     radarChart.destroy();
   }
@@ -141,15 +133,11 @@ function renderRadarChart(metrics) {
         r: {
           suggestedMin: 0,
           suggestedMax: 100,
-          ticks: {
-            stepSize: 20
-          }
+          ticks: { stepSize: 20 }
         }
       },
       plugins: {
-        legend: {
-          display: false
-        }
+        legend: { display: false }
       }
     }
   });
@@ -188,7 +176,7 @@ analyzeBtn.addEventListener("click", async () => {
     // Render text result
     resultBox.innerHTML = formatResult(data.skinMetrics);
 
-    // ✅ Render spider graph
+    // Render spider graph
     renderRadarChart(data.skinMetrics);
 
   } catch (err) {

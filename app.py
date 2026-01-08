@@ -1,11 +1,12 @@
-from flask import Flask, jsonify, send_from_directory, Response, request
+from flask import Flask, jsonify, send_from_directory, request
 from flask_cors import CORS
 import logging
 import os
+import cv2
+import numpy as np
 
-from face_shape_live import generate_frames, get_face_shape_result
-from your_cnn_model import analyze   # ✅ REQUIRED for Option-2
-
+from face_shape_live import analyze_frame
+from your_cnn_model import analyze   # Skin analysis
 
 
 app = Flask(__name__)
@@ -13,6 +14,15 @@ CORS(app)
 logging.basicConfig(level=logging.DEBUG)
 
 BASE_DIR = os.getcwd()
+
+# -----------------------------
+# ✅ Disable Browser Cache (Prevents stale JS)
+# -----------------------------
+@app.after_request
+def add_no_cache_headers(response):
+    response.headers["Cache-Control"] = "no-store"
+    return response
+
 
 # -----------------------------
 # Home Page
@@ -31,32 +41,32 @@ def serve_static(filename):
 
 
 # -----------------------------
-# OPTION 1: Face Shape Live Stream
+# Face Shape Frame Analyzer (Browser Camera)
 # -----------------------------
-@app.route("/face-shape-live")
-def face_shape_live():
-    return Response(
-        generate_frames(),
-        mimetype="multipart/x-mixed-replace; boundary=frame"
-    )
+@app.route("/analyze-frame", methods=["POST"])
+def analyze_frame_api():
+    if "image" not in request.files:
+        return jsonify({"error": "No image uploaded"}), 400
 
+    file = request.files["image"]
+    img_bytes = file.read()
 
-@app.route("/face-shape-result")
-def face_shape_result():
-    result = get_face_shape_result()
-    if result:
-        return jsonify(result)
-    return jsonify({"status": "processing"})
+    np_img = np.frombuffer(img_bytes, np.uint8)
+    frame = cv2.imdecode(np_img, cv2.IMREAD_COLOR)
 
-@app.route("/face-landmarks")
-def face_landmarks():
-    from face_shape_live import current_landmarks
-    return jsonify(current_landmarks or [])
+    if frame is None:
+        return jsonify({"error": "Invalid image"}), 400
 
+    try:
+        result = analyze_frame(frame)
+        return jsonify(result or {"status": "processing"})
+    except Exception as e:
+        logging.exception("Frame analysis failed")
+        return jsonify({"error": str(e)}), 500
 
 
 # -----------------------------
-# OPTION 2: Upload Photo Skin Analysis (🔥 FIXED)
+# Skin Analysis (UNCHANGED)
 # -----------------------------
 @app.route("/analyze-skin", methods=["POST"])
 def analyze_skin():
@@ -77,4 +87,4 @@ def analyze_skin():
 # Run App
 # -----------------------------
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)

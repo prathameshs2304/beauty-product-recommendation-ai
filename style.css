@@ -818,6 +818,94 @@ canvas {
   }
 }
 
+.camera-container {
+  position: relative;
+}
+
+#overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* Mobile-safe hidden file input */
+.file-input {
+  position: absolute;
+  left: -9999px;
+}
+
+/* Make label behave like button */
+.upload-label {
+  cursor: pointer;
+  display: inline-block;
+}
+
+/* ============================
+   FIX: Upload Button Visibility
+============================ */
+
+/* Upload Image button */
+.secondary-btn,
+.upload-label,
+.file-input-label {
+  background: linear-gradient(135deg, #0d6efd, #0047ff) !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* Hover effect */
+.secondary-btn:hover,
+.upload-label:hover,
+.file-input-label:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Active click */
+.secondary-btn:active,
+.upload-label:active,
+.file-input-label:active {
+  transform: scale(0.97);
+}
+
+/* ============================
+   Unified Primary Button Style
+   (Upload + Analyze)
+============================ */
+
+.primary-btn {
+  background: linear-gradient(135deg, #0d6efd, #0047ff) !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* Hover effect */
+.primary-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* Active click */
+.primary-btn:active {
+  transform: scale(0.97);
+}
 
 
 

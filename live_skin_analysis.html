@@ -6,7 +6,7 @@
 
 <link rel="stylesheet" href="style.css">
 
-<!-- ✅ Chart.js for Spider Graph -->
+<!-- ✅ Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -17,7 +17,8 @@ body {
   overflow: hidden;
 }
 
-.camera-container img {
+/* ✅ Video instead of img */
+.camera-container video {
   width: calc(100vw - 360px);
   height: 100vh;
   object-fit: cover;
@@ -99,20 +100,15 @@ body {
   overflow: auto;
 }
 
-/* ===== FORCE TIGHT STACKING FOR RESULT + GRAPH ===== */
-
-/* Kill default spacing */
-pre,
-p {
+/* Tight spacing */
+pre, p {
   margin: 0;
 }
 
-/* Result box spacing */
 .result-box {
   margin-bottom: 4px !important;
 }
 
-/* Metrics title */
 .metrics-title {
   margin-top: 4px !important;
   margin-bottom: 4px !important;
@@ -120,17 +116,14 @@ p {
   color: #111;
 }
 
-/* Pull chart upward */
 #radarChart {
   margin-top: 15px !important;
   display: block;
 }
 
-/* Prevent canvas from creating large empty space */
 .side-panel canvas {
   max-height: 260px;
 }
-
 
 .side-panel p,
 .side-panel h3 {
@@ -138,18 +131,18 @@ p {
   font-weight: 600;
 }
 
-/* Result text inside box */
 .result-box {
   color: #111;
 }
-
 </style>
 </head>
 
 <body>
 
+<!-- ✅ Camera Container -->
 <div class="camera-container">
-  <img id="cameraFeed" src="/face-shape-live">
+  <video id="video" autoplay playsinline></video>
+  <canvas id="captureCanvas" style="display:none;"></canvas>
 </div>
 
 <!-- Overlay -->
@@ -185,8 +178,7 @@ p {
   <canvas id="radarChart" height="260"></canvas>
 </div>
 
-<canvas id="captureCanvas" style="display:none;"></canvas>
-
+<!-- ✅ JS -->
 <script src="live_skin_analysis.js"></script>
 
 </body>

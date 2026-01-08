@@ -22,11 +22,28 @@
       Upload a clear photo and analyze your skin. Ask AI for skincare or makeup advice.
     </p>
 
-    <!-- Controls -->
+    <!-- ================= CONTROLS ================= -->
     <div class="skin-controls">
-      <input type="file" id="imageInput" accept="image/*" hidden>
-      <button id="uploadBtn" class="secondary-btn">Upload Image</button>
-      <button id="analyzeBtn" class="primary-btn">Analyze</button>
+
+      <!-- ✅ Hidden File Input -->
+      <!-- NOTE: NO capture attribute so mobile allows Camera + Gallery -->
+      <input 
+        type="file" 
+        id="imageInput" 
+        accept="image/*"
+        hidden
+      >
+
+      <!-- Upload Button -->
+      <button id="uploadBtn" class="primary-btn">
+        Upload Image
+      </button>
+
+      <!-- Analyze Button -->
+      <button id="analyzeBtn" class="primary-btn">
+        Analyze
+      </button>
+
     </div>
 
     <!-- ================= ANALYSIS ROW ================= -->
@@ -35,13 +52,15 @@
       <!-- Preview -->
       <div class="analysis-panel">
         <p class="section-heading">Preview</p>
-        <img id="preview">
+        <img id="preview" />
       </div>
 
       <!-- Result -->
       <div class="analysis-panel">
         <p class="section-heading">Analysis Result</p>
-        <div id="result" class="result-box">No analysis yet</div>
+        <div id="result" class="result-box">
+          No analysis yet
+        </div>
       </div>
 
       <!-- Radar -->
@@ -58,8 +77,15 @@
       <h2 class="chat-title">AI Beauty Assistant</h2>
 
       <div class="chat-controls">
-        <input type="text" id="userMessage" class="chat-input" placeholder="Ask skincare or makeup...">
-        <button id="sendMessage" class="chat-button">Ask AI</button>
+        <input 
+          type="text" 
+          id="userMessage" 
+          class="chat-input" 
+          placeholder="Ask skincare or makeup..."
+        >
+        <button id="sendMessage" class="chat-button">
+          Ask AI
+        </button>
       </div>
 
       <div id="chatboxFrame" class="chat-frame" style="display:none;">
@@ -72,7 +98,7 @@
 
 </div>
 
-<!-- ================= Page Script ================= -->
+<!-- ================= PAGE SCRIPT ================= -->
 <script>
 (() => {
   const imageInput  = document.getElementById("imageInput");
@@ -96,6 +122,9 @@
 
     preview.src = URL.createObjectURL(file);
     preview.style.display = "block";
+
+    // UX feedback
+    uploadBtn.innerText = "Image Selected ✅";
   });
 
   /* ================= Formatter ================= */
@@ -167,7 +196,7 @@
   analyzeBtn.addEventListener("click", async () => {
     const file = imageInput.files[0];
     if (!file) {
-      alert("Select an image first");
+      alert("Please upload an image first.");
       return;
     }
 

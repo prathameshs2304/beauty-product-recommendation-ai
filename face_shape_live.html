@@ -8,97 +8,214 @@
 body {
   margin: 0;
   background: #000;
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   overflow: hidden;
 }
 
-.camera-container img {
-  width: calc(100vw - 340px);
+/* ================= CAMERA ================= */
+
+.camera-container video {
+  width: calc(100vw - 360px);
   height: 100vh;
   object-fit: cover;
 }
 
+/* ================= GLASS HEADER ================= */
+
 .overlay-header {
   position: fixed;
-  top: 20px;
-  left: 20px;
-  background: rgba(0,0,0,0.65);
+  top: 18px;
+  left: 18px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(12px);
   color: white;
-  padding: 14px 18px;
-  border-radius: 12px;
+  padding: 16px 22px;
+  border-radius: 14px;
   z-index: 10;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  animation: fadeIn 0.6s ease;
 }
+
+.overlay-header h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+#status {
+  font-size: 13px;
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Pulse dot */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  background: #00e676;
+  border-radius: 50%;
+  animation: pulse 1.4s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.2); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================= RIGHT PANEL ================= */
 
 .result-panel {
   position: fixed;
   right: 0;
   top: 0;
-  width: 340px;
+  width: 360px;
   height: 100%;
-  background: #fff;
-  padding: 20px;
+  background: #ffffff;
+  padding: 22px;
   overflow-y: auto;
-  box-shadow: -8px 0 24px rgba(0,0,0,0.3);
+  box-shadow: -10px 0 30px rgba(0,0,0,0.25);
 }
 
-.result-item {
-  margin-bottom: 14px;
-}
-
-.result-item strong {
-  font-size: 12px;
-  color: #666;
-  display: block;
-}
-
-.result-item span {
+.panel-title {
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+/* Metric cards */
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.metric-card {
+  background: #f5f7fa;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: #777;
+}
+
+.metric-value {
+  font-size: 18px;
+  font-weight: 700;
   color: #111;
 }
 
+/* Wide cards */
+.metric-wide {
+  grid-column: span 2;
+}
+
+/* Divider */
 hr {
   border: none;
-  border-top: 1px solid #ddd;
-  margin: 16px 0;
+  border-top: 1px solid #e5e5e5;
+  margin: 18px 0;
+}
+
+/* Confidence bar */
+.progress {
+  width: 100%;
+  height: 8px;
+  background: #eee;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #00c853, #64dd17);
+  transition: width 0.5s ease;
+}
+
+/* Explanation */
+.explanation {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.4;
 }
 </style>
 </head>
 
 <body>
 
+<!-- CAMERA -->
 <div class="camera-container">
-  <img src="/face-shape-live">
+  <video id="video" autoplay playsinline></video>
+  <canvas id="captureCanvas" style="display:none;"></canvas>
 </div>
 
+<!-- HEADER -->
 <div class="overlay-header">
   <h3>Face Shape & Dimensions</h3>
-  <p id="status">Hold still…</p>
+  <p id="status">
+    <span class="status-dot"></span>
+    Initializing camera…
+  </p>
 </div>
 
+<!-- RIGHT PANEL -->
 <div class="result-panel">
 
-  <div class="result-item"><strong>Face Shape</strong><span id="faceShape">—</span></div>
-  <div class="result-item"><strong>Face Width</strong><span id="faceWidth">—</span></div>
-  <div class="result-item"><strong>Face Height</strong><span id="faceHeight">—</span></div>
-  <div class="result-item"><strong>Face Ratio</strong><span id="faceRatio">—</span></div>
-  <div class="result-item"><strong>Facial Balance</strong><span id="facialBalance">—</span></div>
-  
+  <div class="panel-title">Live Analysis</div>
+
+  <div class="metric-grid">
+
+    <div class="metric-card">
+      <div class="metric-label">Face Shape</div>
+      <div class="metric-value" id="faceShape">—</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Facial Balance</div>
+      <div class="metric-value" id="facialBalance">—</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Face Width</div>
+      <div class="metric-value" id="faceWidth">—</div>
+    </div>
+
+    <div class="metric-card">
+      <div class="metric-label">Face Height</div>
+      <div class="metric-value" id="faceHeight">—</div>
+    </div>
+
+    <div class="metric-card metric-wide">
+      <div class="metric-label">Face Ratio</div>
+      <div class="metric-value" id="faceRatio">—</div>
+    </div>
+
+  </div>
 
   <hr>
 
-  <div class="result-item"><strong>Shape Confidence</strong><span id="shapeConfidence">—</span></div>
-  <div class="result-item"><strong>Overall Confidence</strong><span id="confidence">—</span></div>
-
-  <div class="result-item">
-    <strong>Explanation</strong>
-    <span id="explanation" style="font-size:14px;font-weight:normal;color:#444">—</span>
+  <div class="metric-label">Confidence</div>
+  <div class="progress">
+    <div id="confidenceBar" class="progress-fill"></div>
   </div>
+  <div class="metric-value" id="confidence" style="margin-top:6px;">—</div>
+
+  <hr>
+
+  <div class="metric-label">Explanation</div>
+  <div id="explanation" class="explanation">—</div>
 
 </div>
 
-<!-- IMPORTANT: direct path -->
 <script src="/face_shape_live.js"></script>
-
 </body>
 </html>
