@@ -1,33 +1,44 @@
 💄 Beauty Product Recommendation AI
 Face Shape & Skin Intelligence System
 
-An advanced AI-powered web application that analyzes face shape, facial dimensions, skin health (photo + live camera) and provides intelligent beauty insights using computer vision and machine learning.
+An advanced AI-powered web application that analyzes face shape, facial dimensions, and skin health using computer vision and machine learning.
+The system provides intelligent beauty insights with a modern, professional UI and supports multi-device usage (mobile, tablet, laptop).
 
-Designed as a hackathon-grade, industry-style prototype inspired by platforms like PerfectCorp and ModiFace.
+Designed as a hackathon-grade, industry-style prototype, inspired by platforms like PerfectCorp and ModiFace.
 
 🚀 Project Overview
 
-Beauty Product Recommendation AI is a full-stack AI system combining:
+Beauty Product Recommendation AI is a full-stack AI system that demonstrates an end-to-end pipeline:
+
+📷 Camera / Image Input → 🧠 AI Processing → 📊 Visualization → 🤖 User Interaction
+
+Core Capabilities
 
 ✅ Real-time face shape detection
 ✅ Facial landmark geometry analysis
 ✅ Photo-based skin analysis with radar visualization
-✅ Live camera skin analysis with real-time metrics
+✅ Live camera skin analysis workflow
 ✅ AI-powered beauty assistant (chatbot)
-✅ Modern professional UI
+✅ Mobile-friendly responsive UI
+✅ Multi-device camera support (browser-based capture)
+✅ Demo-stable architecture for hackathons and presentations
 
-The system demonstrates end-to-end AI pipeline design from camera capture → landmark processing → ML inference → visualization → user interaction.
+The system is optimized for accuracy, smooth UX, and scalability readiness.
 
 🎯 Key Features
 1️⃣ Face Shape & Dimensions (Live Camera)
 
-Real-time face detection using MediaPipe Face Landmarker
+Real-time face analysis using MediaPipe Face Landmarker running on backend inference.
 
-Extracts 468+ facial landmarks
+Extracts:
+
+468+ facial landmarks
+
+Face geometry metrics
 
 Computes:
 
-Face Shape (Square, Oval, Round, etc.)
+Face Shape (Square / Oval / Round)
 
 Face Width & Height (px)
 
@@ -35,15 +46,27 @@ Face Ratio
 
 Facial Balance (Balanced / Elongated)
 
-Confidence score
+Stability-based Confidence Score
 
-Landmark stabilization prevents flickering
+Highlights:
 
-Live mesh visualization with professional UI
+Browser-based camera capture (works on phone, tablet, laptop)
+
+Stable inference buffer for accurate results
+
+Clean glassmorphism dashboard UI
+
+Animated confidence indicator
+
+Optimized for low latency during demos
 
 2️⃣ Upload Photo Skin Analysis (Completed)
 
-Upload any face image
+Upload any face image from:
+
+📱 Mobile gallery / camera
+
+💻 Desktop files
 
 AI analyzes multiple skin metrics:
 
@@ -65,29 +88,33 @@ Skin tone
 
 Wrinkles
 
-Outputs structured explainable metrics
+Outputs:
 
-Radar (Spider) Graph Visualization
+Structured explainable metrics
 
-Blue / black professional styling
+Radar (Spider) graph visualization
 
-Clear comparative visualization of skin parameters
+Clear three-column layout:
 
-Clean three-column layout:
+Image Preview
 
-Preview image
+Analysis Results
 
-Analysis results
+Radar Visualization
 
-Radar visualization
+UX Enhancements:
 
-Integrated AI Beauty Assistant chatbot
+Mobile-safe upload behavior
 
-3️⃣ Live Face Skin Analysis (Real-Time Camera) ✅ (New)
+Visual confirmation when image is selected
 
-Real-time camera feed with facial landmark overlay
+Clean modern buttons and layout
 
-Pose validation before capture:
+3️⃣ Live Face Skin Analysis (Camera Workflow)
+
+Real-time camera feed with pose validation before capture.
+
+Pose Validation Rules:
 
 Face centered
 
@@ -97,13 +124,21 @@ No tilt / rotation
 
 Good lighting
 
-One-click capture workflow
+Workflow:
 
-Live skin metrics analysis after capture
+Live camera alignment
 
-Real-time Radar Graph visualization
+Pose stability detection
 
-Compact side-panel UI for:
+One-click capture
+
+AI skin analysis
+
+Radar graph visualization
+
+UI Features:
+
+Compact side-panel layout
 
 Preview image
 
@@ -111,13 +146,13 @@ Skin metrics
 
 Radar chart
 
-Designed for demo stability and judge testing
+Optimized for judge testing and demo stability
 
 4️⃣ AI Beauty Assistant
 
-Integrated chatbot using Botpress
+Integrated chatbot powered by Botpress.
 
-Handles:
+Supports:
 
 Skincare guidance
 
@@ -125,21 +160,23 @@ Makeup suggestions
 
 Product advice
 
-Works alongside analysis results for personalized assistance
+Personalized follow-ups based on analysis
+
+Works alongside visual analysis results for a guided experience.
 
 5️⃣ Modern UI / UX
 
 Glassmorphism card design
 
-Responsive layout
+Responsive layout for all devices
 
 Feature selection dashboard
 
-Clean alignment and spacing
+Animated metrics and confidence indicators
 
-Real-time chart visualization
+Clean typography and spacing
 
-Optimized for live demos and presentations
+Optimized for presentations and live demos
 
 🧠 Tech Stack
 Frontend
@@ -170,14 +207,13 @@ Rule-based face shape classification
 
 CNN-based skin analysis (photo upload)
 
-Stability confidence logic
+Stability-based confidence logic
 
 📂 Project Structure
 beauty-product-recommendation-ai/
 │
 ├── app.py
 ├── face_shape_live.py
-├── face_shape_analyzer.py
 ├── your_cnn_model.py
 │
 ├── templates/
@@ -189,6 +225,7 @@ beauty-product-recommendation-ai/
 ├── static/
 │   ├── face_shape_live.js
 │   ├── live_skin_analysis.js
+│   ├── script.js
 │   ├── style.css
 │   ├── img1.jpeg
 │   ├── img2.jpeg
@@ -217,11 +254,21 @@ python app.py
 5️⃣ Open in Browser
 http://127.0.0.1:5000/feature_selection.html
 
+🌐 Multi-Device Support
+
+The application uses browser-based camera capture, allowing:
+
+✅ Each device to use its own camera
+✅ Mobile, tablet, laptop compatibility
+✅ No dependency on host machine camera
+✅ Reliable public tunnel demos
+✅ Independent judge testing
+
 📸 Screenshots
 
 (Add screenshots here using GitHub drag & drop)
 
-Suggested:
+Suggested screenshots:
 
 Feature Selection Dashboard
 
@@ -251,11 +298,13 @@ Personalized product recommendation engine
 
 User profile history tracking
 
-Cloud deployment (AWS / GCP)
+Cloud deployment (AWS / GCP / Azure)
 
-Mobile camera optimization
+Mobile performance optimization
 
-Real-time skin tracking (no capture required)
+Real-time continuous skin tracking (without capture)
+
+Multi-user analytics dashboard
 
 🧑‍💻 Author
 
@@ -263,12 +312,12 @@ Prathamesh Shekade
 B.Tech IT | AI & Data Science Enthusiast
 Hackathon Finalist | AI Engineer Aspirant
 
-GitHub: https://github.com/prathameshs2304
+GitHub:
+👉 https://github.com/prathameshs2304
 
 📜 License
 
-This project is licensed for educational and demonstration purposes.
-This project is licensed for educational & demonstration purposes.# beauty-product-recommendation-ai
+This project is licensed for educational and demonstration purposes only.
 <img width="2047" height="1150" alt="image" src="https://github.com/user-attachments/assets/cd50dd20-d975-414c-b4a8-2fbd8536301b" />
 <img width="2047" height="1092" alt="image" src="https://github.com/user-attachments/assets/07b64b45-36d0-4334-b08c-affe4cfc3611" />
 <img width="1918" height="981" alt="image" src="https://github.com/user-attachments/assets/132890be-3ab1-454a-b0da-290c16d7b6d3" />
